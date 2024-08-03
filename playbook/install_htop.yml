@@ -1,0 +1,16 @@
+---
+- name: Install Htop wget jq
+  hosts: all
+  become: yes  # Ensure we have sudo permissions
+  tasks:
+    - name: Update package list
+      apt:
+        update_cache: yes
+
+    - name: Install htop
+      apt:
+        name:
+          - htop 
+          - wget
+          - jq
+        state: latest

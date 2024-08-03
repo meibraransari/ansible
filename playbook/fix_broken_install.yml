@@ -1,0 +1,18 @@
+---
+- name: Fix broken packages
+  hosts: all
+  become: yes  # Ensure we have sudo permissions
+  tasks:
+    - name: Run apt --fix-broken install
+      shell: apt --fix-broken install -y
+      # You can use `command` instead of `shell` if you don't need shell features:
+      # command: apt --fix-broken install -y
+      # `-y` flag automatically answers 'yes' to prompts
+
+    - name: Update package list
+      apt:
+        update_cache: yes
+
+    - name: Upgrade all packages
+      apt:
+        upgrade: dist

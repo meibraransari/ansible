@@ -1,0 +1,13 @@
+---
+- name: Uninstall Htop
+  hosts: all
+  become: yes  # Ensure we have sudo permissions
+  tasks:
+    - name: Update package list
+      apt:
+        update_cache: yes
+
+    - name: Un-Install htop
+      apt:
+        name: htop
+        state: absent

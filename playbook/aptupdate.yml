@@ -1,0 +1,8 @@
+---
+- name: Update apt package cache on all nodes
+  hosts: all
+  become: yes
+  tasks:
+  - name: Update apt package index
+    apt:
+      update_cache: yes
