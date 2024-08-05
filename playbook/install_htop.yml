@@ -13,4 +13,5 @@
           - htop 
           - wget
           - jq
+          - iputils-ping
         state: latest
