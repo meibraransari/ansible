@@ -1,0 +1,40 @@
+---
+- name: Deploy Portainer using Docker
+  hosts: docker_host
+  gather_facts: false
+  become: yes
+  tasks:
+    - name: Ensure Docker is installed
+      ansible.builtin.service:
+        name: docker
+        state: started
+
+    - name: Ensure Docker SDK for Python is installed
+      ansible.builtin.apt:
+        name: python3-docker
+        state: present
+        update_cache: yes
+
+    - name: Pull Portainer image
+      community.docker.docker_image:
+        name: portainer/portainer-ce:latest
+        source: pull
+
+    - name: Run Portainer container
+      community.docker.docker_container:
+        name: portainer
+        image: portainer/portainer-ce:latest
+        state: started
+        ports:
+            - 8000:8000
+            - 9443:9443
+        restart_policy: always
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+            - portainer_data:/data
+
+    - name: Wait for port 9443 to become available
+      ansible.builtin.wait_for:
+        port: 9443
+        delay: 10
+
